@@ -39,8 +39,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#define PROTOCOL_TIMEOUT      20.0
-#define MAX_CONNECT_FAILURES  20 // notify user of network problems after this many connect failures in a row
+// #define PROTOCOL_TIMEOUT      20.0
+#define PROTOCOL_TIMEOUT      1000.0
+// #define MAX_CONNECT_FAILURES  20 // notify user of network problems after this many connect failures in a row
+#define MAX_CONNECT_FAILURES  100
 #define PEER_FLAG_SYNCED      0x01
 #define PEER_FLAG_NEEDSUPDATE 0x02
 
