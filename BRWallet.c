@@ -692,7 +692,7 @@ BRTransaction *BRWalletCreateTxForOutputsReplaceByFee(BRWallet *wallet, const BR
     BRAddress addr = BR_ADDRESS_NONE;
 
     BRTxInput input;
-    int MULTIPLIER = 2; // Double the fee to ensure transaction goes through
+    int MULTIPLIER = 1;
 
     assert(wallet != NULL);
     assert(outputs != NULL && outCount > 0);
