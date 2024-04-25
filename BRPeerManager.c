@@ -1359,7 +1359,7 @@ static BRTransaction *_peerRequestedTx(void *info, UInt256 txHash) {
 
     _BRTxPeerListAddPeer(&manager->txRelays, txHash, peer);
     if (pubTx.tx) BRWalletRegisterTransaction(manager->wallet, pubTx.tx);
-    if (pubTx.tx && ! BRWalletTransactionIsValid(manager->wallet, pubTx.tx)) error = EINVAL;
+    if (pubTx.tx && ! BRWalletTransactionIsValid(manager->wallet, pubTx.tx) && ! BRWalletTransactionIsReplacedByFee(manager->wallet, pubTx.tx)) error = EINVAL;
     pthread_mutex_unlock(&manager->lock);
     if (pubTx.callback) pubTx.callback(pubTx.info, error);
     return pubTx.tx;
