@@ -504,6 +504,13 @@ BRAddress BRWalletReceiveAddress(BRWallet *wallet) {
     return addr;
 }
 
+void BRWalletReceiveAddressString(BRWallet *wallet, char *charArray, size_t len) {
+    BRAddress addr = BR_ADDRESS_NONE;
+
+    BRWalletUnusedAddrs(wallet, &addr, 1, 0);
+    memcpy(charArray, addr.s, len);
+}
+
 // returns the first unused external address (legacy pay-to-pubkey-hash)
 BRAddress BRWalletLegacyAddress(BRWallet *wallet) {
     BRAddress addr = BR_ADDRESS_NONE;
@@ -692,7 +699,7 @@ BRTransaction *BRWalletCreateTxForOutputsReplaceByFee(BRWallet *wallet, const BR
     BRAddress addr = BR_ADDRESS_NONE;
 
     BRTxInput input;
-    int MULTIPLIER = 1;
+    double MULTIPLIER = 1.5;
 
     assert(wallet != NULL);
     assert(outputs != NULL && outCount > 0);
@@ -709,7 +716,7 @@ BRTransaction *BRWalletCreateTxForOutputsReplaceByFee(BRWallet *wallet, const BR
 
     minAmount = BRWalletMinOutputAmount(wallet);
     pthread_mutex_lock(&wallet->lock);
-    feeAmount = feeOriginal + MULTIPLIER * _txFee(wallet->feePerKb, BRTransactionVSize(transaction) + TX_OUTPUT_SIZE);
+    feeAmount = feeOriginal + (uint64_t) MULTIPLIER * _txFee(wallet->feePerKb, BRTransactionVSize(transaction) + TX_OUTPUT_SIZE);
 
     // TODO: use up all UTXOs for all used addresses to avoid leaving funds in addresses whose public key is revealed
     // TODO: avoid combining addresses in a single transaction when possible to reduce information leakage
@@ -771,7 +778,7 @@ BRTransaction *BRWalletCreateTxForOutputsReplaceByFee(BRWallet *wallet, const BR
 //            ! _BRWalletTxIsSend(wallet, tx)) cpfpSize += BRTransactionVSize(tx);
 
                 // fee amount after adding a change output
-                feeAmount = feeOriginal + MULTIPLIER * _txFee(wallet->feePerKb,
+                feeAmount = feeOriginal + (uint64_t) MULTIPLIER * _txFee(wallet->feePerKb,
                                                               BRTransactionVSize(transaction) + TX_OUTPUT_SIZE + cpfpSize);
 
                 // increase fee to round off remaining wallet balance to nearest 100 satoshi
@@ -848,7 +855,7 @@ BRTransaction *BRWalletCreateTxForOutputsReplaceByFee(BRWallet *wallet, const BR
 //            ! _BRWalletTxIsSend(wallet, tx)) cpfpSize += BRTransactionVSize(tx);
 
                     // fee amount after adding a change output
-                    feeAmount = feeOriginal + MULTIPLIER * _txFee(wallet->feePerKb,
+                    feeAmount = feeOriginal + (uint64_t) MULTIPLIER * _txFee(wallet->feePerKb,
                                                                   BRTransactionVSize(transaction) + TX_OUTPUT_SIZE + cpfpSize);
 
                     // increase fee to round off remaining wallet balance to nearest 100 satoshi

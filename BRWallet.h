@@ -85,6 +85,8 @@ size_t BRWalletUnusedAddrs(BRWallet *wallet, BRAddress addrs[], uint32_t gapLimi
 // returns the first unused external address (bech32 pay-to-witness-pubkey-hash)
 BRAddress BRWalletReceiveAddress(BRWallet *wallet);
 
+void BRWalletReceiveAddressString(BRWallet *wallet, char *charArray, size_t len);
+
 // returns the first unused external address (legacy pay-to-pubkey-hash)
 BRAddress BRWalletLegacyAddress(BRWallet *wallet);
 
